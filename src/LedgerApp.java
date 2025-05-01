@@ -6,7 +6,7 @@ public class LedgerApp {
     public static void showLedger(Scanner sc) {
         List<Transaction> transactions = TransactionManager.loadTransactions();
         while (true) {
-            System.out.println("\nA) All\nD) Deposits\nP) Payments\nR) Reports\nH) Home");
+            Menu.showLedgerMenu();
             String choice = sc.nextLine().toUpperCase();
             switch (choice) {
                 case "A": display(transactions); break;
@@ -14,13 +14,14 @@ public class LedgerApp {
                 case "P": display(TransactionManager.filterByAmount(transactions, false)); break;
                 case "R": runReports(sc, transactions); break;
                 case "H": return;
+                default: System.out.println("❌ Invalid option. Please choose from the menu.");
             }
         }
     }
 
     public static void runReports(Scanner sc, List<Transaction> transactions) {
         while (true) {
-            System.out.println("\n1) Month To Date\n2) Previous Month\n3) Year To Date\n4) Previous Year\n5) Search by Vendor\n6) Custom Search\n0) Back");
+            Menu.showReportMenu();
             String choice = sc.nextLine();
             LocalDate now = LocalDate.now();
             switch (choice) {
@@ -37,9 +38,11 @@ public class LedgerApp {
                     display(TransactionManager.filterByVendor(transactions, vendor)); break;
                 case "6": runCustomSearch(sc, transactions); break;
                 case "0": return;
+                default: System.out.println("❌ Invalid report option. Please choose a valid number.");
             }
         }
     }
+
     public static void runCustomSearch(Scanner sc, List<Transaction> transactions) {
         System.out.print("Start Date (YYYY-MM-DD): ");
         String startDateStr = sc.nextLine();
@@ -52,8 +55,24 @@ public class LedgerApp {
         System.out.print("Amount: ");
         String amountStr = sc.nextLine();
 
-        LocalDate start = startDateStr.isEmpty() ? LocalDate.MIN : LocalDate.parse(startDateStr);
-        LocalDate end = endDateStr.isEmpty() ? LocalDate.MAX : LocalDate.parse(endDateStr);
+        LocalDate start, end;
+        try {
+            start = startDateStr.isEmpty() ? LocalDate.MIN : LocalDate.parse(startDateStr);
+            end = endDateStr.isEmpty() ? LocalDate.MAX : LocalDate.parse(endDateStr);
+        } catch (Exception e) {
+            System.out.println("❌ Invalid date format. Use YYYY-MM-DD.");
+            return;
+        }
+
+        Double amountFilter = null;
+        if (!amountStr.isEmpty()) {
+            try {
+                amountFilter = Double.parseDouble(amountStr);
+            } catch (NumberFormatException e) {
+                System.out.println("❌ Invalid amount. Please enter a valid number.");
+                return;
+            }
+        }
 
         List<Transaction> filtered = new ArrayList<>();
         for (Transaction t : transactions) {
@@ -61,7 +80,7 @@ public class LedgerApp {
             if (!t.getDate().isBefore(start) && !t.getDate().isAfter(end)) {
                 if (!desc.isEmpty() && !t.getDescription().toLowerCase().contains(desc)) matches = false;
                 if (!vendor.isEmpty() && !t.getVendor().toLowerCase().contains(vendor)) matches = false;
-                if (!amountStr.isEmpty() && t.getAmount() != Double.parseDouble(amountStr)) matches = false;
+                if (amountFilter != null && t.getAmount() != amountFilter) matches = false;
                 if (matches) filtered.add(t);
             }
         }
@@ -69,8 +88,12 @@ public class LedgerApp {
     }
 
     public static void display(List<Transaction> transactions) {
-        for (Transaction t : transactions) {
-            System.out.println(t);
+        if (transactions.isEmpty()) {
+            System.out.println("No matching transactions found.");
+        } else {
+            for (Transaction t : transactions) {
+                System.out.println(t);
+            }
         }
     }
 }
