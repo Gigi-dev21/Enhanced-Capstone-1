@@ -1,6 +1,3 @@
-
-
-// Main.java
 import java.util.Scanner;
 
 public class Main {
@@ -12,8 +9,11 @@ public class Main {
             switch (choice) {
                 case "D": ActionHandler.addTransaction(sc, true); break;
                 case "P": ActionHandler.addTransaction(sc, false); break;
-                case "L": ActionHandler.openLedger(sc); break;
-                case "X": return;
+                case "L": LedgerApp.showLedger(sc); break;
+                case "X": {
+                    System.out.println("\u001B[36m👋 Thanks for using the Accounting Ledger App. Have a productive and financially savvy day!\u001B[0m");
+                    return;
+                }
             }
         }
     }

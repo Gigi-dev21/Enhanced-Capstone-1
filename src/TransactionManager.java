@@ -34,6 +34,12 @@ public class TransactionManager {
         }
         return result;
     }
+    public static void displayTransactions(List<Transaction> transactions) {
+        for (Transaction t : transactions) {
+            System.out.println(t);
+        }
+    }
+
 
     public static List<Transaction> filterByVendor(List<Transaction> transactions, String vendor) {
         List<Transaction> result = new ArrayList<>();
