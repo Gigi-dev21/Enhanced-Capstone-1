@@ -14,7 +14,6 @@ public class LedgerApp {
                 case "P": display(TransactionManager.filterByAmount(transactions, false)); break;
                 case "R": runReports(sc, transactions); break;
                 case "H": return;
-                default: System.out.println("❌ Invalid option. Please choose from the menu.");
             }
         }
     }
@@ -38,7 +37,6 @@ public class LedgerApp {
                     display(TransactionManager.filterByVendor(transactions, vendor)); break;
                 case "6": runCustomSearch(sc, transactions); break;
                 case "0": return;
-                default: System.out.println("❌ Invalid report option. Please choose a valid number.");
             }
         }
     }
@@ -64,23 +62,20 @@ public class LedgerApp {
             return;
         }
 
-        Double amountFilter = null;
-        if (!amountStr.isEmpty()) {
-            try {
-                amountFilter = Double.parseDouble(amountStr);
-            } catch (NumberFormatException e) {
-                System.out.println("❌ Invalid amount. Please enter a valid number.");
-                return;
-            }
-        }
-
         List<Transaction> filtered = new ArrayList<>();
         for (Transaction t : transactions) {
             boolean matches = true;
             if (!t.getDate().isBefore(start) && !t.getDate().isAfter(end)) {
                 if (!desc.isEmpty() && !t.getDescription().toLowerCase().contains(desc)) matches = false;
                 if (!vendor.isEmpty() && !t.getVendor().toLowerCase().contains(vendor)) matches = false;
-                if (amountFilter != null && t.getAmount() != amountFilter) matches = false;
+                if (!amountStr.isEmpty()) {
+                    try {
+                        if (t.getAmount() != Double.parseDouble(amountStr)) matches = false;
+                    } catch (NumberFormatException e) {
+                        System.out.println("❌ Invalid amount input in search.");
+                        return;
+                    }
+                }
                 if (matches) filtered.add(t);
             }
         }
@@ -88,12 +83,8 @@ public class LedgerApp {
     }
 
     public static void display(List<Transaction> transactions) {
-        if (transactions.isEmpty()) {
-            System.out.println("No matching transactions found.");
-        } else {
-            for (Transaction t : transactions) {
-                System.out.println(t);
-            }
+        for (Transaction t : transactions) {
+            System.out.println(t);
         }
     }
 }
