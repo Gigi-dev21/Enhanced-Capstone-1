@@ -36,7 +36,6 @@ Smart Error Handling — app doesn't crash on bad input
 
 Screenshots 
 
-Take and upload these to your GitHub repo
 
 - 🏠 Main Menu
 - ![image](https://github.com/user-attachments/assets/50e1ada7-0810-4e06-810e-6af444351d98)
