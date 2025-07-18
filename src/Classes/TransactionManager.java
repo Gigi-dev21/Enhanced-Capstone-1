@@ -2,6 +2,8 @@ package Classes;
 
 
 // TransactionManager.java
+import DB.DBHandler;
+
 import java.io.*;
 import java.time.LocalDate;
 import java.util.*;
@@ -36,10 +38,9 @@ public class TransactionManager {
         }
         return result;
     }
+
     public static void displayTransactions(List<Transaction> transactions) {
-        for (Transaction t : transactions) {
-            System.out.println(t);
-        }
+        DBHandler.displayTransactionsFromDB();
     }
 
 

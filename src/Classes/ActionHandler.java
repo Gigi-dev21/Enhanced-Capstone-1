@@ -1,5 +1,7 @@
 package Classes;
 
+import DB.DBHandler;
+
 import java.util.Scanner;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -20,6 +22,7 @@ public class ActionHandler {
         if (!isDeposit) amount *= -1;
         Transaction t = new Transaction(LocalDate.now(), LocalTime.now(), description, vendor, amount);
         TransactionManager.saveTransaction(t);
+        DBHandler.saveTransactionToDB(t);
 
         System.out.println("\u001B[32m✅ Thank you! Your transaction has been saved successfully.\u001B[0m");
     }
