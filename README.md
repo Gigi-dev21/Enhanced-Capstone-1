@@ -63,6 +63,9 @@ This project was built as my **Capstone 1** for the *Java Development Fundamenta
 ### 📊 Ledger Output + Net Balance Summary  
 ![Ledger Output](https://github.com/user-attachments/assets/1c0d073b-40ae-4162-bce4-b2170690de7d)
 
+### 📊 My sql Database  
+![Ledger Output](https://github.com/user-attachments/assets/1c0d073b-40ae-4162-bce4-b2170690de7d)
+
 ---
 
 ## 💡 Interesting Code Snippet
