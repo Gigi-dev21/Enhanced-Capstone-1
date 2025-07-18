@@ -1,3 +1,5 @@
+package Classes;
+
 public class Menu {
     public static void showMainMenu() {
         System.out.println("\n🏠 \u001B[34mMain Menu\u001B[0m");
